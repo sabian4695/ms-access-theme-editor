@@ -121,12 +121,13 @@ For Each ctl In setForm.Controls 'simply loop through all controls on the form
             ctl.BackColor = backCol
             
             '---this is for swapping out button icons for light / dark theme icons - turned off by default---
-            '            If (ctl.Picture = "") Then GoTo skipAhead0
-            '            If darkMode Then
-            '                If InStr(ctl.Picture, "\Core_theme_light\") Then ctl.Picture = Replace(ctl.Picture, "\Core_theme_light\", "\Core\")
-            '            Else
-            '                If InStr(ctl.Picture, "\Core\") Then ctl.Picture = Replace(ctl.Picture, "\Core\", "\Core_theme_light\")
-            '            End If
+'                        If (ctl.Picture = "") Then GoTo skipAhead0
+'                        If darkMode Then
+'                            If InStr(ctl.Picture, "\Core_theme_light\") Then ctl.Picture = Replace(ctl.Picture, "\Core_theme_light\", "\Core\")
+'                        Else
+'                            If InStr(ctl.Picture, "\Core\") Then ctl.Picture = Replace(ctl.Picture, "\Core\", "\Core_theme_light\")
+'                        End If
+'skipAhead0:
             '---
             
             
@@ -153,18 +154,18 @@ For Each ctl In setForm.Controls 'simply loop through all controls on the form
                 fadeBack = shadeColor(backCol, scalarBack)
             End If
             
+            If ctl.tag Like "*accentBtn*" Then
+                fadeBack = shadeColor(backAccent, (0.2 * Level) + scalarBack)
+                ctl.BackColor = shadeColor(backAccent, scalarBack)
+                ctl.Gradient = 17
+            End If
+            
             ctl.HoverColor = fadeBack
             ctl.PressedColor = fadeBack
             
             If ctl.tag Like "*cardBtn*" Then
                 ctl.HoverColor = backCol
                 ctl.PressedColor = backCol
-            End If
-            
-            If ctl.tag Like "*accentBtn*" Then
-                fadeBack = shadeColor(backAccent, scalarBack)
-                ctl.BackColor = backAccent
-                ctl.Gradient = 17
             End If
         '---
         '---LABEL
@@ -224,16 +225,6 @@ Next
 Exit Function
 Err_Handler:
     Call handleError("modTheme", "setTheme", Err.DESCRIPTION, Err.Number)
-End Function
-
-Function themeCommandButton()
-On Error GoTo Err_Handler
-
-
-
-Exit Function
-Err_Handler:
-    Call handleError("modTheme", "themeCommandButton", Err.DESCRIPTION, Err.Number)
 End Function
 
 Function findColorLevel(tagText As String) As Long
