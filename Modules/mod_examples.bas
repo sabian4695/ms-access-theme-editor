@@ -1,79 +1,79 @@
-Option Compare Database
-Option Explicit
+option compare database
+option explicit
 
-Function dueDay(dueDate, completeddate) As String
-On Error Resume Next
+function dueday(duedate, completeddate) as string
+on error resume next
 
-If IsNull(dueDate) Then
-    dueDay = "N/A"
-    Exit Function
-End If
+if isnull(duedate) then
+    dueday = "N/A"
+    exit function
+end if
 
-If IsNull(completeddate) Then
-    Select Case dueDate
-        Case date
-            dueDay = "Today"
-        Case date + 1
-            dueDay = "Tomorrow"
-        Case Is < date
-            dueDay = "Overdue"
-        Case Is < date + 7
-            dueDay = WeekdayName(Weekday(dueDate))
-        Case date + 7
-            dueDay = "1 Week"
-        Case Is < date + 14
-            dueDay = "<2 Weeks"
-        Case date + 14
-            dueDay = "2 Weeks"
-        Case Is < date + 21
-            dueDay = "<3 Weeks"
-        Case date + 21
-            dueDay = "3 Weeks"
-        Case Is < date + 28
-            dueDay = "<4 Weeks"
-        Case date + 28
-            dueDay = "4 Weeks"
-        Case Is > date + 28
-            dueDay = ">4 Weeks"
-        Case Else
-            dueDay = dueDate
-    End Select
-Else
-    dueDay = "Complete"
-End If
+if isnull(completeddate) then
+    select case duedate
+        case date
+            dueday = "Today"
+        case date + 1
+            dueday = "Tomorrow"
+        case is < date
+            dueday = "Overdue"
+        case is < date + 7
+            dueday = weekdayname(weekday(duedate))
+        case date + 7
+            dueday = "1 Week"
+        case is < date + 14
+            dueday = "<2 Weeks"
+        case date + 14
+            dueday = "2 Weeks"
+        case is < date + 21
+            dueday = "<3 Weeks"
+        case date + 21
+            dueday = "3 Weeks"
+        case is < date + 28
+            dueday = "<4 Weeks"
+        case date + 28
+            dueday = "4 Weeks"
+        case is > date + 28
+            dueday = ">4 Weeks"
+        case else
+            dueday = duedate
+    end select
+else
+    dueday = "Complete"
+end if
 
-End Function
+end function
 
-Function randomNumber(low As Long, high As Long) As Long
+function randomnumber(low as long, high as long) as long
 
-Randomize
-randomNumber = Int((high - low + 1) * Rnd() + low)
+randomize
+randomnumber = int((high - low + 1) * rnd() + low)
 
-End Function
+end function
 
-Function generateValues()
+function generatevalues()
 
-Dim db As Database
-Dim rs As Recordset
+dim db as database
+dim rs as recordset
 
-Set db = CurrentDb()
-Set rs = db.OpenRecordset("tblTaskTracker_example")
+set db = currentdb()
+set rs = db.openrecordset("tblTaskTracker_example")
 
-Do While Not rs.EOF
-    rs.Edit
+do while not rs.eof
+    rs.edit
     
-    rs!Request_Type = randomNumber(1, 7)
-    rs!complexity = randomNumber(1, 3)
-    rs!Assignee = randomNumber(1, 10)
-    rs!Checker_1 = randomNumber(1, 10)
-    rs!Checker_2 = randomNumber(1, 10)
-    rs!Customer = randomNumber(1, 3)
-    rs!Delay_Reason = randomNumber(1, 3)
-    rs!Status = randomNumber(1, 6)
+    rs!request_type = randomnumber(1, 7)
+    rs!complexity = randomnumber(1, 3)
+    rs!assignee = randomnumber(1, 10)
+    rs!checker_1 = randomnumber(1, 10)
+    rs!checker_2 = randomnumber(1, 10)
+    rs!customer = randomnumber(1, 3)
+    rs!delay_reason = randomnumber(1, 3)
+    rs!status = randomnumber(1, 6)
     
-    rs.Update
+    rs.update
     
-    rs.MoveNext
-Loop
+    rs.movenext
+loop
 
-End Function
+end function

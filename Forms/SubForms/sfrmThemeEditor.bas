@@ -1,87 +1,87 @@
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Compare Database
-Option Explicit
+attribute vb_globalnamespace = false
+attribute vb_creatable = true
+attribute vb_predeclaredid = true
+attribute vb_exposed = false
+option compare database
+option explicit
 
-Private Sub Detail_Paint()
-On Error Resume Next
+private sub detail_paint()
+on error resume next
 
-Me.primaryColor.BackColor = Me.primaryColor
-Me.primaryColor.ForeColor = Me.primaryColor
+me.primarycolor.backcolor = me.primarycolor
+me.primarycolor.forecolor = me.primarycolor
 
-If Me.secondaryColor = 0 Then
-    Me.secondaryColor.BackColor = Me.primaryColor
-    Me.secondaryColor.ForeColor = Me.primaryColor
-Else
-    Me.secondaryColor.BackColor = Me.secondaryColor
-    Me.secondaryColor.ForeColor = Me.secondaryColor
-End If
+if me.secondarycolor = 0 then
+    me.secondarycolor.backcolor = me.primarycolor
+    me.secondarycolor.forecolor = me.primarycolor
+else
+    me.secondarycolor.backcolor = me.secondarycolor
+    me.secondarycolor.forecolor = me.secondarycolor
+end if
 
-If Me.darkMode Then
-    Me.dMode.BackColor = 0
-    Me.dMode.ForeColor = vbWhite
-    Me.themeName.ForeColor = vbWhite
-Else
-    Me.dMode.BackColor = vbWhite
-    Me.dMode.ForeColor = 0
-    Me.themeName.ForeColor = 0
-End If
+if me.darkmode then
+    me.dmode.backcolor = 0
+    me.dmode.forecolor = vbwhite
+    me.themename.forecolor = vbwhite
+else
+    me.dmode.backcolor = vbwhite
+    me.dmode.forecolor = 0
+    me.themename.forecolor = 0
+end if
 
-End Sub
+end sub
 
-Private Sub Form_Load()
-On Error GoTo Err_Handler
+private sub form_load()
+on error goto err_handler
 
-Call setTheme(Me)
+call settheme(me)
     
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, "Form_Load", Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, "Form_Load", err.description, err.number)
+end sub
 
-Private Sub themeName_Click()
-On Error GoTo Err_Handler
+private sub themename_click()
+on error goto err_handler
 
-Dim f As Form, sForm As Control
-Dim i As Integer
+dim f as form, sform as control
+dim i as integer
 
-TempVars.Add "themePrimary", Me.primaryColor.Value
-TempVars.Add "themeSecondary", Me.secondaryColor.Value
-TempVars.Add "themeAccent", Me.accentColor.Value
+tempvars.add "themePrimary", me.primarycolor.value
+tempvars.add "themeSecondary", me.secondarycolor.value
+tempvars.add "themeAccent", me.accentcolor.value
 
-If Me.darkMode Then
-    TempVars.Add "themeMode", "Dark"
-Else
-    TempVars.Add "themeMode", "Light"
-End If
+if me.darkmode then
+    tempvars.add "themeMode", "Dark"
+else
+    tempvars.add "themeMode", "Light"
+end if
 
-TempVars.Add "themeColorLevels", Me.colorLevels.Value
+tempvars.add "themeColorLevels", me.colorlevels.value
 
-Form_frmThemeEditor.Filter = "recordId = " & Me.recordId
-Form_frmThemeEditor.FilterOn = True
+form_frmthemeeditor.filter = "recordId = " & me.recordid
+form_frmthemeeditor.filteron = true
 
-Form_frmThemeEditor.splitColorArray
-DoEvents
+form_frmthemeeditor.splitcolorarray
+doevents
 
-Dim obj
+dim obj
 
-For Each obj In Application.CurrentProject.AllForms
-    If obj.IsLoaded = False Then GoTo nextOne
-    Set f = forms(obj.Name)
-    Call setTheme(f)
-    For Each sForm In f.Controls
-        If sForm.ControlType = acSubform Then
-            On Error Resume Next
-            Call setTheme(sForm.Form)
-            On Error GoTo Err_Handler
-        End If
-    Next sForm
-nextOne:
-Next obj
+for each obj in application.currentproject.allforms
+    if obj.isloaded = false then goto nextone
+    set f = forms(obj.name)
+    call settheme(f)
+    for each sform in f.controls
+        if sform.controltype = acsubform then
+            on error resume next
+            call settheme(sform.form)
+            on error goto err_handler
+        end if
+    next sform
+nextone:
+next obj
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, Me.ActiveControl.Name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub

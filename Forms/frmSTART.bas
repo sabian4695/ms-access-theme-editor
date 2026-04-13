@@ -1,57 +1,57 @@
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Compare Database
-Option Explicit
+attribute vb_globalnamespace = false
+attribute vb_creatable = true
+attribute vb_predeclaredid = true
+attribute vb_exposed = false
+option compare database
+option explicit
 
-Private Sub Form_Load()
-On Error GoTo Err_Handler
+private sub form_load()
+on error goto err_handler
 
-'here is the standard VBA call for applying a theme to a form
-Call setTheme(Me)
+'here is the standard vba call for applying a theme to a form
+call settheme(me)
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, "Form_Load", Err.DESCRIPTION, Err.Numbe)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, "Form_Load", err.description, err.numbe)
+end sub
 
-Private Sub linkArticle_Click()
-On Error GoTo Err_Handler
+private sub linkarticle_click()
+on error goto err_handler
 
-FollowHyperlink "https://www.vbadecoded.com/ms-access-vba/user-themes"
+followhyperlink "https://www.vbadecoded.com/ms-access-vba/user-themes"
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, Me.ActiveControl.Name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub linkGithub_Click()
-On Error GoTo Err_Handler
+private sub linkgithub_click()
+on error goto err_handler
 
-FollowHyperlink "https://github.com/vbadecoded/ms-access-theme-editor"
+followhyperlink "https://github.com/vbadecoded/ms-access-theme-editor"
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, Me.ActiveControl.Name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub sampleTracker_Click()
-On Error GoTo Err_Handler
+private sub sampletracker_click()
+on error goto err_handler
 
-DoCmd.OpenForm "frmTaskTracker_example"
+docmd.openform "frmTaskTracker_example"
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, Me.ActiveControl.Name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub themeEditor_Click()
-On Error GoTo Err_Handler
+private sub themeeditor_click()
+on error goto err_handler
 
-DoCmd.OpenForm "frmThemeEditor"
+docmd.openform "frmThemeEditor"
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.Name, Me.ActiveControl.Name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
