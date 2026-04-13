@@ -1,129 +1,237 @@
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Compare Database
-Option Explicit
+attribute vb_globalnamespace = false
+attribute vb_creatable = true
+attribute vb_predeclaredid = true
+attribute vb_exposed = false
+option compare database
+option explicit
 
-Function applyThemeChanges()
+function applythemechanges()
+on error goto err_handler
 
-TempVars.Add "themePrimary", Me.primaryColor.Value
-TempVars.Add "themeSecondary", Me.secondaryColor.Value
+'all the theme information is in tempvars so it resets when you close it and it will persist an entire database session. this could be a local session variables table as well
+tempvars.add "themePrimary", me.primarycolor.value
+tempvars.add "themeSecondary", me.secondarycolor.value
+tempvars.add "themeAccent", me.accentcolor.value
 
-If Me.darkMode Then
-    TempVars.Add "themeMode", "Dark"
-Else
-    TempVars.Add "themeMode", "Light"
-End If
+if me.darkmode then
+    tempvars.add "themeMode", "Dark"
+else
+    tempvars.add "themeMode", "Light"
+end if
 
-TempVars.Add "themeColorLevels", Me.colorLevels.Value
+tempvars.add "themeColorLevels", me.colorlevels.value
 
-DoCmd.Hourglass True
-Me.Painting = False
-DoCmd.Echo False
+'trying to prevent flashing...
+docmd.hourglass true
+me.painting = false
+docmd.echo false
 
-Call setTheme(Me)
-Call setTheme(Me.sfrmThemeEditor.Form)
+'this code applies the theme to all open forms
 
-DoCmd.Hourglass False
-Me.Painting = True
-DoCmd.Echo True
+dim f as form, sform as control
+dim i as integer
 
-End Function
-Private Sub colorLevels_AfterUpdate()
-splitColorArray
-End Sub
+dim obj
+for each obj in application.currentproject.allforms
+    if obj.isloaded = false then goto nextone
+    set f = forms(obj.name)
+    call settheme(f)
+    for each sform in f.controls
+        if sform.controltype = acsubform then
+            on error resume next
+            call settheme(sform.form)
+            on error goto err_handler
+        end if
+    next sform
+nextone:
+next obj
 
-Private Sub Detail_Paint()
-On Error Resume Next
+call settheme(me)
+call settheme(me.sfrmthemeeditor.form)
 
-Me.showPrimary.BackColor = Me.primaryColor
-Me.showSecondary.BackColor = Me.secondaryColor
+me.showprimary.backcolor = me.primarycolor
+me.showsecondary.backcolor = me.secondarycolor
+me.showaccent.backcolor = me.accentcolor
 
-End Sub
+'make sure the form updates again
+docmd.hourglass false
+me.painting = true
+docmd.echo true
 
-Private Sub Form_Load()
-On Error GoTo Err_Handler
+exit function
+err_handler:
+    call handleerror(me.name, "applyThemeChanges", err.description, err.number)
+end function
 
-applyThemeChanges
+private sub accentcolor_click()
+on error goto err_handler
 
-splitColorArray
+if me.dirty then me.dirty = false
+me.activecontrol = colorpicker(me.activecontrol)
+
+'me.showprimary.backcolor = me.primarycolor
+'me.showsecondary.backcolor = me.secondarycolor
+me.showaccent.backcolor = me.accentcolor
+
+applythemechanges
+
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
+
+private sub colorlevels_afterupdate()
+on error goto err_handler
+
+splitcolorarray
+
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
+
+private sub detail_paint()
+on error resume next
+
+me.showprimary.backcolor = me.primarycolor
+me.showsecondary.backcolor = me.secondarycolor
+
+end sub
+
+private sub form_load()
+on error goto err_handler
+
+call settheme(me)
+
+splitcolorarray
     
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, "Form_Load", Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, "Form_Load", err.description, err.number)
+end sub
 
-Function applyLevels()
+function applylevels()
+on error goto err_handler
 
-Select Case ""
-    Case Nz(Me.L1), Nz(Me.L2), Nz(Me.L3), Nz(Me.L4)
-        Exit Function
-    Case Else
-        Me.colorLevels = Me.L1 & "," & Me.L2 & "," & Me.L3 & "," & Me.L4
-        applyThemeChanges
-End Select
+select case ""
+    case nz(me.l1), nz(me.l2), nz(me.l3), nz(me.l4)
+        exit function
+    case else
+        me.colorlevels = me.l1 & "," & me.l2 & "," & me.l3 & "," & me.l4
+        applythemechanges
+end select
 
-End Function
+exit function
+err_handler:
+    call handleerror(me.name, "applyLevels", err.description, err.number)
+end function
 
-Public Function splitColorArray()
+public function splitcolorarray()
+on error goto err_handler
 
-Dim splitIt() As String
+dim splitit() as string
 
-splitIt = Split(Me.colorLevels, ",")
+splitit = split(me.colorlevels, ",")
 
-Me.L1 = splitIt(0)
-Me.L2 = splitIt(1)
-Me.L3 = splitIt(2)
-Me.L4 = splitIt(3)
+me.l1 = splitit(0)
+me.l2 = splitit(1)
+me.l3 = splitit(2)
+me.l4 = splitit(3)
 
-End Function
+exit function
+err_handler:
+    call handleerror(me.name, "splitColorArray", err.description, err.number)
+end function
 
-Private Sub L1_AfterUpdate()
-applyLevels
-End Sub
+private sub l1_afterupdate()
+on error goto err_handler
 
-Private Sub L2_AfterUpdate()
-applyLevels
-End Sub
+applylevels
 
-Private Sub L3_AfterUpdate()
-applyLevels
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub L4_AfterUpdate()
-applyLevels
-End Sub
+private sub l2_afterupdate()
+on error goto err_handler
 
-Private Sub newTheme_Click()
-DoCmd.GoToRecord , , acNewRec
-End Sub
+applylevels
 
-Private Sub primaryColor_Click()
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-If Me.Dirty Then Me.Dirty = False
-Me.ActiveControl = colorPicker(Me.ActiveControl)
+private sub l3_afterupdate()
+on error goto err_handler
 
-Me.showPrimary.BackColor = Me.primaryColor
-Me.showSecondary.BackColor = Me.secondaryColor
+applylevels
 
-applyThemeChanges
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-End Sub
+private sub l4_afterupdate()
+on error goto err_handler
 
-Private Sub secondaryColor_Click()
+applylevels
 
-If Me.Dirty Then Me.Dirty = False
-Me.ActiveControl = colorPicker(Me.ActiveControl)
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Me.showPrimary.BackColor = Me.primaryColor
-Me.showSecondary.BackColor = Me.secondaryColor
+private sub newtheme_click()
+on error goto err_handler
 
-applyThemeChanges
+docmd.gotorecord , , acnewrec
 
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub testTheme_Click()
-If Me.Dirty Then Me.Dirty = False
-applyThemeChanges
-End Sub
+private sub primarycolor_click()
+on error goto err_handler
+
+if me.dirty then me.dirty = false
+me.activecontrol = colorpicker(me.activecontrol)
+
+me.showprimary.backcolor = me.primarycolor
+me.showsecondary.backcolor = me.secondarycolor
+
+applythemechanges
+
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
+
+private sub secondarycolor_click()
+on error goto err_handler
+
+if me.dirty then me.dirty = false
+me.activecontrol = colorpicker(me.activecontrol)
+
+me.showprimary.backcolor = me.primarycolor
+me.showsecondary.backcolor = me.secondarycolor
+
+applythemechanges
+
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
+
+private sub testtheme_click()
+on error goto err_handler
+
+if me.dirty then me.dirty = false
+applythemechanges
+
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub

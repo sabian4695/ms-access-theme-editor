@@ -1,90 +1,91 @@
-Option Compare Database
-Option Explicit
+option compare database
+option explicit
 
-Public Sub handleError(modName As String, activeCon As String, errDesc As String, errNum As Long, Optional dataTag As String = "")
-On Error Resume Next
+public sub handleerror(modname as string, activecon as string, errdesc as string, errnum as long, optional datatag as string = "")
+on error resume next
 
-Select Case errNum
-    Case 70
-        MsgBox "Permissions Error - Check if the file is already in use.", vbInformation, "Error Code: " & errNum
-    Case 53
-        MsgBox "File Not Found", vbInformation, "Error Code: " & errNum
-        Exit Sub
-    Case 3011
-        MsgBox "Looks like I'm having issues connecting to SharePoint. Please reopen when you can", vbInformation, "Error Code: " & errNum
-    Case 490, 52, 75
-        MsgBox "I cannot open this file or location - check if it has been moved or deleted. Or - you do not have proper access to this location", vbInformation, "Error Code: " & errNum
-        Exit Sub
-    Case 3022
-        MsgBox "A record with this key already exists. I cannot create another!", vbInformation, "Error Code: " & errNum
-    Case 3167
-        MsgBox "Looks like you already deleted that record", vbInformation, "Error Code: " & errNum
-        Exit Sub
-    Case 94
-        MsgBox "Hmm. Looks like something is missing. Check for an empty field", vbInformation, "Error Code: " & errNum
-    Case 3151
-        MsgBox "You're not connected to Oracle. Just FYI, Oracle connection does not work outside of VMWare.", vbInformation, "Error Code: " & errNum
-        Exit Sub
-    Case 429
-        If modName = "frmCatiaMacros" Then
-            MsgBox "Looks like Catia isn't open", vbInformation, "Error Code: " & errNum
-            Exit Sub
-        Else
-            MsgBox errDesc, vbInformation, "Error Code: " & errNum
-        End If
-    Case 3343
-        MsgBox "Error. Please re-open WorkingDB to reset.", vbCritical, "Error Code: " & errNum
-    Case Else
-        MsgBox errDesc, vbInformation, "Error Code: " & errNum
-End Select
+select case errnum
+    case 70
+        msgbox "Permissions Error - Check if the file is already in use.", vbinformation, "Error Code: " & errnum
+    case 53
+        msgbox "File Not Found", vbinformation, "Error Code: " & errnum
+        exit sub
+    case 3011
+        msgbox "Looks like I'm having issues connecting to SharePoint. Please reopen when you can", vbinformation, "Error Code: " & errnum
+    case 490, 52, 75
+        msgbox "I cannot open this file or location - check if it has been moved or deleted. Or - you do not have proper access to this location", vbinformation, "Error Code: " & errnum
+        exit sub
+    case 3022
+        msgbox "A record with this key already exists. I cannot create another!", vbinformation, "Error Code: " & errnum
+    case 3167
+        msgbox "Looks like you already deleted that record", vbinformation, "Error Code: " & errnum
+        exit sub
+    case 94
+        msgbox "Hmm. Looks like something is missing. Check for an empty field", vbinformation, "Error Code: " & errnum
+    case 3151
+        msgbox "You're not connected to Oracle. Just FYI, Oracle connection does not work outside of VMWare.", vbinformation, "Error Code: " & errnum
+        exit sub
+    case 429
+        if modname = "frmCatiaMacros" then
+            msgbox "Looks like Catia isn't open", vbinformation, "Error Code: " & errnum
+            exit sub
+        else
+            msgbox errdesc, vbinformation, "Error Code: " & errnum
+        end if
+    case 3343
+        msgbox "Error. Please re-open WorkingDB to reset.", vbcritical, "Error Code: " & errnum
+    case else
+        msgbox errdesc, vbinformation, "Error Code: " & errnum
+end select
 
-End Sub
+end sub
 
-Function ap_DisableShift()
+function ap_disableshift()
 
-On Error GoTo errDisableShift
-Dim db As DAO.Database
-Dim prop As DAO.Property
-Const conPropNotFound = 3270
+on error goto errdisableshift
+dim db as dao.database
+dim prop as dao.property
+const conpropnotfound = 3270
 
-Set db = CurrentDb()
+set db = currentdb()
 
-db.Properties("AllowByPassKey") = False
-Set db = Nothing
-Exit Function
+db.properties("AllowByPassKey") = false
+set db = nothing
+exit function
 
-errDisableShift:
-If Err = conPropNotFound Then
-    Set prop = db.CreateProperty("AllowByPassKey", dbBoolean, False)
-    db.Properties.Append prop
-    Resume Next
-    Else
-    MsgBox "Function 'ap_DisableShift' did not complete successfully."
-    Exit Function
-End If
+errdisableshift:
+if err = conpropnotfound then
+    set prop = db.createproperty("AllowByPassKey", dbboolean, false)
+    db.properties.append prop
+    resume next
+    else
+    msgbox "Function 'ap_DisableShift' did not complete successfully."
+    exit function
+end if
 
-End Function
+end function
 
-Function ap_EnableShift()
+function ap_enableshift()
 
-On Error GoTo errEnableShift
-Dim db As DAO.Database
-Dim prop As DAO.Property
-Const conPropNotFound = 3270
+on error goto errenableshift
+dim db as dao.database
+dim prop as dao.property
+const conpropnotfound = 3270
 
-Set db = CurrentDb()
-db.Properties("AllowByPassKey") = True
-Set db = Nothing
-Exit Function
+set db = currentdb()
 
-errEnableShift:
-If Err = conPropNotFound Then
-Set prop = db.CreateProperty("AllowByPassKey", dbBoolean, True)
-db.Properties.Append prop
-Resume Next
-Else
-MsgBox "Function 'ap_DisableShift' did not complete successfully."
-Exit Function
-End If
+db.properties("AllowByPassKey") = true
+set db = nothing
+exit function
 
-End Function
+errenableshift:
+if err = conpropnotfound then
+    set prop = db.createproperty("AllowByPassKey", dbboolean, true)
+    db.properties.append prop
+    resume next
+    else
+    msgbox "Function 'ap_DisableShift' did not complete successfully."
+    exit function
+end if
+
+end function

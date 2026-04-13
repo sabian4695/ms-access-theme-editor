@@ -1,57 +1,57 @@
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Compare Database
-Option Explicit
+attribute vb_globalnamespace = false
+attribute vb_creatable = true
+attribute vb_predeclaredid = true
+attribute vb_exposed = false
+option compare database
+option explicit
 
-Private Sub btnCancel_Click()
-On Error GoTo Err_Handler
+private sub btncancel_click()
+on error goto err_handler
 
-Me.Status = 99
+me.status = 99
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub closeTask_Click()
-On Error GoTo Err_Handler
+private sub closetask_click()
+on error goto err_handler
 
-Me.Status = 6
-Me.Completed_Date = date
+me.status = 6
+me.completed_date = date
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub Form_Load()
-On Error GoTo Err_Handler
+private sub form_load()
+on error goto err_handler
 
-Call setTheme(Me)
+call settheme(me)
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, "Form_Load", Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, "Form_Load", err.description, err.number)
+end sub
 
-Private Sub refresh_Click()
-On Error GoTo Err_Handler
+private sub refresh_click()
+on error goto err_handler
 
-Me.Requery
+me.requery
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub submitTask_Click()
-On Error GoTo Err_Handler
+private sub submittask_click()
+on error goto err_handler
 
-Me.Status = 3
+me.status = 3
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub

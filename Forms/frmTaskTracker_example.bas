@@ -1,63 +1,63 @@
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Compare Database
-Option Explicit
+attribute vb_globalnamespace = false
+attribute vb_creatable = true
+attribute vb_predeclaredid = true
+attribute vb_exposed = false
+option compare database
+option explicit
 
-Function filterIt(controlName As String)
-On Error GoTo Err_Handler
+function filterit(controlname as string)
+on error goto err_handler
 
-Me(controlName).SetFocus
-DoCmd.RunCommand acCmdFilterMenu
+me(controlname).setfocus
+docmd.runcommand accmdfiltermenu
 
-Exit Function
-Err_Handler:
-    Call handleError(Me.name, "filterIt", Err.DESCRIPTION, Err.Number)
-End Function
+exit function
+err_handler:
+    call handleerror(me.name, "filterIt", err.description, err.number)
+end function
 
-Private Sub Form_Load()
-On Error GoTo Err_Handler
+private sub form_load()
+on error goto err_handler
 
-Call setTheme(Me)
+call settheme(me)
 
-Me.Filter = "completed_date is null"
-Me.FilterOn = True
+me.filter = "completed_date is null"
+me.filteron = true
 
-Me.OrderBy = "Due_date"
-Me.OrderByOn = True
+me.orderby = "Due_date"
+me.orderbyon = true
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, "Form_Load", Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, "Form_Load", err.description, err.number)
+end sub
 
-Private Sub newTask_Click()
-On Error GoTo Err_Handler
+private sub newtask_click()
+on error goto err_handler
 
-MsgBox "No sample form here, just a sample button to show an 'action button'"
+msgbox "No sample form here, just a sample button to show an 'action button'"
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Private Sub openDetails_Click()
-On Error GoTo Err_Handler
+private sub opendetails_click()
+on error goto err_handler
 
-DoCmd.OpenForm "frmTaskDetails_example", , , "recordId = " & Me.recordId
+docmd.openform "frmTaskDetails_example", , , "recordId = " & me.recordid
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
 
-Public Sub refresh_Click()
-On Error GoTo Err_Handler
+public sub refresh_click()
+on error goto err_handler
 
-Me.Requery
+me.requery
 
-Exit Sub
-Err_Handler:
-    Call handleError(Me.name, Me.ActiveControl.name, Err.DESCRIPTION, Err.Number)
-End Sub
+exit sub
+err_handler:
+    call handleerror(me.name, me.activecontrol.name, err.description, err.number)
+end sub
